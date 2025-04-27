@@ -3,6 +3,7 @@ import express from 'express';
 import tasksRouter from './api/tasks';
 import usersRouter from './api/users';
 import './db';
+import authenticate from './authenticate';
 import cors from 'cors';
 
 
@@ -28,7 +29,7 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-app.use('/api/tasks', tasksRouter);
+app.use('/api/tasks', authenticate, tasksRouter);
 
 app.use('/api/users', usersRouter);
 
