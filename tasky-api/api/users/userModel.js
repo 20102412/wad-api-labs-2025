@@ -10,29 +10,29 @@ const UserSchema = new Schema({
 });
 
 UserSchema.methods.comparePassword = async function (passw) { 
-    return await bcrypt.compare(passw, this.password); 
+  return await bcrypt.compare(passw, this.password); 
 };
 
 UserSchema.statics.findByUserName = function (username) {
-    return this.findOne({ username: username });
-  };
+  return this.findOne({ username: username });
+};
   
-  UserSchema.pre('save', async function(next) {
-    const saltRounds = 10; // You can adjust the number of salt rounds
-    //const user = this;
-    if (this.isModified('password') || this.isNew) {
-      try {
-        const hash = await bcrypt.hash(this.password, saltRounds);
-        this.password = hash;
-        next();
-    } catch (error) {
-       next(error);
-    }
-  
-    } else {
-        next();
-    }
-  });
-  
+UserSchema.pre('save', async function(next) {
+  const saltRounds = 10; // You can adjust the number of salt rounds
+  //const user = this;
+  if (this.isModified('password') || this.isNew) {
+    try {
+      const hash = await bcrypt.hash(this.password, saltRounds);
+      this.password = hash;
+      next();
+  } catch (error) {
+     next(error);
+  }
 
+  } else {
+      next();
+  }
+});
+
+  
 export default mongoose.model('User', UserSchema);
